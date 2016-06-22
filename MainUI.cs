@@ -91,7 +91,14 @@ namespace CnCMemoryWatchTool
                     count = 0;
                 }
 
-                FilteredBytes[j] = MemBytes[i];
+                if (MemBytes[i] == 0x00)
+                {
+                    FilteredBytes[j] = (byte)' ';
+                }
+                else
+                {
+                    FilteredBytes[j] = MemBytes[i];
+                }
     
             }
             
