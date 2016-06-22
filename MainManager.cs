@@ -45,9 +45,12 @@ namespace CnCMemoryWatchTool
         {
             //byte[] pattern = new byte[] { 0x54, 0x02, 0x61, 0x02, 0x72, 0x02 };
             // 30 02 30 02 30 02 30 02 29 02
-            byte[] pattern = new byte[] { 0x54, 0x02, 0x61, 0x02, 0x72, 0x02 };
+            // 60 10 00 F0 08 00 70 00 08 00 70 00 08 00 70 00 08 00 70 00 60 10
+            // 60 10 00 F0 08 00 70 00 08 00 70 00 08 00 70 00 08 00 70 00 60 10
+            byte[] pattern = new byte[] { 0x60, 0x10, 0x00, 0xF0, 0x08, 0x00, 0x70, 0x00, 0x08,
+                0x00, 0x70, 0x00, 0x08, 0x00, 0x70, 0x00, 0x08, 0x00, 0x70, 0x00, 0x60, 0x10 };
 
-            for (int searchOffset = 0x01000062; searchOffset < 0x081E0062; searchOffset += 0x100)
+            for (int searchOffset = 0x0; searchOffset < int.MaxValue; searchOffset += 0x100)
             {
                 byte[] MemB = this.ProcMem.ReadMem(searchOffset, 0x100, false);
 
@@ -56,7 +59,7 @@ namespace CnCMemoryWatchTool
                 if (foundList.Count > 0)
                 {
                     this.MemoryOffset = searchOffset + foundList[0];
-                    this.MemoryOffset -= 66; // Fix up offset
+                    this.MemoryOffset += 0xB0000; // Fix up offset
                     return;
                 }
             }
