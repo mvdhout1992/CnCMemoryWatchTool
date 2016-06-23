@@ -72,13 +72,17 @@ namespace CnCMemoryWatchTool
             this.MemoryOffset = -1;
 
             MessageBox.Show(String.Format("Offset for mono page found at: {0:X}", MemoryOffset));
+            Application.Exit();
         }
 
         private void LoadProcessMemory()
         {
             this.ProcMem = new ProcessMemory("dosbox");
-            this.ProcMem.OpenProcess();
-            // TODO: add error handling
+            if (!this.ProcMem.OpenProcess())
+            {
+                Application.Exit();
+            }
+            
         }
 
 
