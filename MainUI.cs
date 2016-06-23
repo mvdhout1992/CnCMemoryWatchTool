@@ -14,6 +14,7 @@ namespace CnCMemoryWatchTool
     public partial class MainUI : Form
     {
         MainManager mainManager;
+        int CurrentPage = -1;
 
         public MainUI()
         {
@@ -30,6 +31,8 @@ namespace CnCMemoryWatchTool
             OutputTextBoxRefreshTimer.Tick += new EventHandler(RefreshOutput);
             OutputTextBoxRefreshTimer.Enabled = true;
             OutputTextBoxRefreshTimer.Interval = 40;
+
+            SetCurrentPage(0);
         }
 
         // Fix stupid flickering
@@ -49,8 +52,15 @@ namespace CnCMemoryWatchTool
             SetMemoryBytesTextBoxOutput();
         }
 
+        private void SetCurrentPage(int page)
+        {
+            CurrentPage = page;
+            labelCurrentPage.Text = "" + CurrentPage;
+        }
+
         private void SetMemoryBytesTextBoxOutput()
         {
+            mainManager.SetAdJustedOffset(CurrentPage * 0xFA0);
             mainManager.UpdateMemoryBytes();
             byte[] MemBytes = mainManager.GetMemoryBytes();
 
@@ -131,5 +141,18 @@ namespace CnCMemoryWatchTool
             LockWindowUpdate(IntPtr.Zero);
         }
 
+        private void MainUI_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxPage_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                int page = int.Parse(textBoxPage.Text);
+                SetCurrentPage(page);            
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace CnCMemoryWatchTool
         ProcessMemory ProcMem;
         byte[] MemBytes;
         int MemoryOffset = -1;
+        int AdjustedOffset = 0;
 
         public MainManager()
         {
@@ -38,7 +39,12 @@ namespace CnCMemoryWatchTool
 
         private void LoadMemoryBytes()
         {
-            this.MemBytes = this.ProcMem.ReadMem(this.MemoryOffset, 0x8000, false);
+            this.MemBytes = this.ProcMem.ReadMem(this.MemoryOffset + AdjustedOffset, 0x8000, false);
+        }
+
+        public void SetAdJustedOffset(int offset)
+        {
+            this.AdjustedOffset = offset;
         }
 
         private void LoadMemoryOffset()
