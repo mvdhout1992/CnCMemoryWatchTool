@@ -56,7 +56,7 @@ namespace CnCMemoryWatchTool
             byte[] pattern = new byte[] { 0x60, 0x10, 0x00, 0xF0, 0x08, 0x00, 0x70, 0x00, 0x08,
                 0x00, 0x70, 0x00, 0x08, 0x00, 0x70, 0x00, 0x08, 0x00, 0x70, 0x00, 0x60, 0x10 };
 
-            for (int searchOffset = 0x0; searchOffset < int.MaxValue; searchOffset += 0x100)
+            for (int searchOffset = 0x0; searchOffset < (int.MaxValue >> 4); searchOffset += 0x100)
             {
                 byte[] MemB = this.ProcMem.ReadMem(searchOffset, 0x100, false);
 
@@ -71,8 +71,9 @@ namespace CnCMemoryWatchTool
             }
             this.MemoryOffset = -1;
 
-            MessageBox.Show(String.Format("Offset for mono page found at: {0:X}", MemoryOffset));
-            Application.Exit();
+            MessageBox.Show("Can't find memory offsets for the monopages in DOSBox memory. Shutting down." 
+                + " Consider running this application after starting DOSBox but before starting a DOS application.");
+            Environment.Exit(-1);
         }
 
         private void LoadProcessMemory()
@@ -80,7 +81,7 @@ namespace CnCMemoryWatchTool
             this.ProcMem = new ProcessMemory("dosbox");
             if (!this.ProcMem.OpenProcess())
             {
-                Application.Exit();
+                Environment.Exit(-1);
             }
             
         }
